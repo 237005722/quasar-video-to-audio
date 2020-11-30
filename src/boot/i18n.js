@@ -24,7 +24,7 @@ export default async ({ app }) => {
       /* webpackInclude: /(de|en-us)\.js$/ */
       `quasar/lang/${locale}`
     )
-    Quasar.lang.set(lang.default)
+    lang && Quasar.lang.set(lang.default)
   } catch (err) {
     // Requested Quasar Language Pack does not exist,
     // let's not break the app, so catching error

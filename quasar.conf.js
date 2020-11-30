@@ -23,6 +23,7 @@ module.exports = function (/* ctx */) {
       
       'i18n',
       'axios',
+      'indexDB',
       'video-to-audio',
     ],
 
@@ -112,7 +113,8 @@ module.exports = function (/* ctx */) {
         'LocalStorage',
         'SessionStorage',
         'AppFullscreen',
-        'Notify'
+        'Notify',
+        'Dialog'
       ]
     },
 

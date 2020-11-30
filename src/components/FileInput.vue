@@ -15,22 +15,22 @@
 <script>
 export default {
   name: 'FileInput',
-  data() {
+  data () {
     return {
       files: null
     }
   },
   watch: {
-    files(val, old) {
+    files (val, old) {
       if (val && val !== old) {
         this.$emit('input', val)
       }
     }
   },
-  created() {
+  created () {
 
   },
-  destroyed() {
+  destroyed () {
 
   }
 }

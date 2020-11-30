@@ -12,23 +12,42 @@
       </q-card-section>
     </q-card>
 
-    <q-card v-for="item in fileList" :key="item.name" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
+    <q-card v-for="(item, index) in fileList" :key="item.name" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
       <q-video :src="item.src" class="q-pt-md"/>
       <q-card-section>
         <q-btn
           :disable="loading"
+          :loading="loading"
+          push
+          round
+          ripple
+          color="negative"
+          icon="delete"
+          class="absolute"
+          style="top: 0; right: 80px; transform: translateY(-50%);"
+          @click="delVideo(item, index)"
+        >
+          <template v-slot:loading>
+            <q-spinner-facebook />
+          </template>
+          <q-tooltip content-class="bg-negative">{{$t('action.delVideo')}}</q-tooltip>
+        </q-btn>
+        <q-btn
+          :disable="loading"
+          :loading="loading"
           push
           round
           ripple
           color="primary"
           icon="audiotrack"
           class="absolute"
-          style="top: 0; right: 12px; transform: translateY(-50%);" 
+          style="top: 0; right: 12px; transform: translateY(-50%);"
           @click="videoToAudio(item)"
         >
           <template v-slot:loading>
             <q-spinner-facebook />
           </template>
+          <q-tooltip content-class="bg-primary">{{$t('action.videoToAudio')}}</q-tooltip>
         </q-btn>
         <div class="row no-wrap items-center">
           <div class="col text-h6 ellipsis"> {{ item.name }} </div>
@@ -42,18 +61,20 @@
         <q-card-section>
           <q-btn
             :disable="loading"
+            :loading="loading"
             push
             round
             ripple
-            color="negative"
+            color="secondary"
             icon="file_download"
             class="absolute"
-            style="top: 0; right: 12px; transform: translateY(-50%);" 
+            style="top: 0; right: 12px; transform: translateY(-50%);"
             @click="downloadAudio(item)"
           >
             <template v-slot:loading>
               <q-spinner-facebook />
             </template>
+            <q-tooltip content-class="bg-secondary">{{$t('action.downloadAudio')}}</q-tooltip>
           </q-btn>
         <div class="row no-wrap items-center">
           <div class="col text-h6 ellipsis"> {{ item.audioName }} </div>
@@ -80,54 +101,70 @@ export default {
       default: () => false
     }
   },
-  data() {
+  data () {
     return {
       loading: false,
       fileList: []
     }
   },
   watch: {
-    files(val, old) {
+    files (val, old) {
       console.log('VideoCard watch files', val)
       if (val && val !== old) {
         this.initFileList(val)
       }
     },
-    fileList(val, old) {
+    fileList (val, old) {
       console.log('VideoCard watch fileList', val)
       if (val && val.length > 1) {
         this.$emit('update:showSticky', true)
       } else {
         this.$emit('update:showSticky', false)
       }
-    },
+    }
   },
-  created() {
-
+  created () {
+    console.log('created')
+    this.$indexDB.initDB(this.$myDB, () => {
+      this.$indexDB.getDataByKey('fileList', (store, res) => {
+        if (res && res.data) {
+          for (const file of res.data) {
+            this.initFileItem(file)
+          }
+          this.initFileData()
+        }
+      })
+    })
   },
-  destroyed() {
-
+  destroyed () {
+    console.log('destroyed')
+    this.$indexDB.closeDB()
   },
   methods: {
-    initFileList(files = this.files) {
+    async initFileList (files = this.files) {
       this.loading = true
-      Object.keys(files).map(key => {
+      await Object.keys(files).map(key => {
         const file = files[key]
-        this.fileList.push({
-          file: file,
-          name: file.name,
-          src: URL.createObjectURL(file),
-          data: null,
-          duration: '',
-          audioName: file.name + '.wav',
-          audioBlob: null,
-          audioSrc: null
-        })
+        this.initFileItem(file)
       })
       this.initFileData()
+      console.log('initFileList cacheFileList')
+      this.cacheFileList()
       this.loading = false
     },
-    initFileData() {
+    initFileItem (file) {
+      this.fileList.push({
+        file: file,
+        name: file.name,
+        src: URL.createObjectURL(file),
+        data: null,
+        duration: '',
+        audioName: file.name + '.wav',
+        audioBlob: null,
+        audioSrc: null
+      })
+    },
+    initFileData () {
       this.fileList.map(item => {
         if (!item.data) {
           this.$videoTool.decodedData(item.file).then(data => {
@@ -137,7 +174,28 @@ export default {
         }
       })
     },
-    videoToAudio(item) {
+    delVideo (item, index) {
+      this.$q.dialog({
+        title: `${this.$t('confirmTitle')}`,
+        message: `${this.$t('action.delVideoConfirm')}`,
+        ok: `${this.$t('confirmOk')}`,
+        cancel: `${this.$t('confirmCancel')}`,
+        persistent: true
+      }).onOk(() => {
+        this.loading = true
+        this.fileList.splice(index, 1)
+        console.log('delVideo cacheFileList')
+        this.cacheFileList()
+        this.loading = false
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    videoToAudio (item) {
       this.loading = true
       if (item.data) {
         this.$videoTool.dataToAudio(item.data, item.name).then(audio => {
@@ -152,12 +210,12 @@ export default {
       }
       this.loading = false
     },
-    updateFileData(audio, item) {
+    updateFileData (audio, item) {
       if (audio) {
         item.audioBlob = audio.blob
         item.audioSrc = URL.createObjectURL(audio.blob)
         item.duration = audio.duration
-        
+
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
@@ -173,10 +231,21 @@ export default {
         })
       }
     },
-    downloadAudio(item) {
+    downloadAudio (item) {
       this.loading = true
       this.$videoTool.downloadWav(item.audioBlob, item.name)
       this.loading = false
+    },
+    cacheFileList () {
+      const modData = []
+      this.fileList.map(item => {
+        modData.push(item.file)
+      })
+      console.log('cacheFileList modData', modData)
+      this.$indexDB.putData({
+        id: 'fileList',
+        data: modData
+      })
     }
   }
 }

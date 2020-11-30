@@ -1,5 +1,5 @@
 // import something here
-/***
+/** *
  * video-to-audio
  * creater：qc
  * reference：//github.com/mdn/webaudio-examples/tree/master/offline-audio-context-promise
@@ -9,7 +9,7 @@ const videoToAudio = async (file) => {
     console.log('videoToAudio file', file)
     const decodedAudioData = await decodedData(file)
     console.log('decodedAudioData', decodedAudioData)
-    
+
     const dataToAudio = await dataToAudio(decodedAudioData)
     console.log('dataToAudio', dataToAudio)
 
@@ -110,9 +110,9 @@ const downloadWav = (blob, name = 'audio') => {
 }
 const durationTrans = (a) => {
   let b = ''
-  let h = parseInt(a / 3600),
-    m = parseInt(a % 3600 / 60),
-    s = parseInt(a % 3600 % 60)
+  let h = parseInt(a / 3600)
+  let m = parseInt(a % 3600 / 60)
+  let s = parseInt(a % 3600 % 60)
   if (h > 0) {
     h = h < 10 ? '0' + h : h
     b += h + ':'

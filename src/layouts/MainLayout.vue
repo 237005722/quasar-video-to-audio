@@ -11,7 +11,9 @@
           <q-toolbar-title>{{ $t('title') }}</q-toolbar-title>
         </router-link>
         <q-space />
-        <q-btn push color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right"/>
+        <q-btn push color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right">
+          <q-tooltip content-class="bg-primary">{{$t('settingsDesc')}}</q-tooltip>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -32,8 +34,8 @@
               <q-avatar icon="lightbulb_outline" color="secondary" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$q.dark.isActive ? $t('setting.day_mode') : $t('setting.night_mode')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currently_in')}} {{$q.dark.isActive ? $t('setting.night_mode') : $t('setting.day_mode')}}</q-item-label>
+              <q-item-label>{{$q.dark.isActive ? $t('setting.dayMode') : $t('setting.nightMode')}}</q-item-label>
+              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$q.dark.isActive ? $t('setting.nightMode') : $t('setting.dayMode')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator inset spaced />
@@ -42,8 +44,8 @@
               <q-avatar :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'" color="primary" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$q.fullscreen.isActive ? $t('setting.normal_mode') : $t('setting.full_screen_mode')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currently_in')}} {{$q.fullscreen.isActive ? $t('setting.full_screen_mode') : $t('setting.normal_mode')}}</q-item-label>
+              <q-item-label>{{$q.fullscreen.isActive ? $t('setting.normalMode') : $t('setting.fullScreenMode')}}</q-item-label>
+              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$q.fullscreen.isActive ? $t('setting.fullScreenMode') : $t('setting.normalMode')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator inset spaced />
@@ -53,8 +55,8 @@
               <q-radio v-model="lang" val="en-us" color="accent" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$t('setting.en_us')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currently_in')}} {{$t('setting.en_us')}}</q-item-label>
+              <q-item-label>{{$t('setting.enUs')}}</q-item-label>
+              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$t('setting.enUs')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-item tag="label" v-close-popup tabindex="4">
@@ -62,8 +64,8 @@
               <q-radio v-model="lang" val="zh-hans" color="negative" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$t('setting.zh_simple')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currently_in')}} {{$t('setting.zh_simple')}}</q-item-label>
+              <q-item-label>{{$t('setting.zhSimple')}}</q-item-label>
+              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$t('setting.zhSimple')}}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

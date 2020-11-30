@@ -6,9 +6,9 @@
     > -->
 
     <div class="row flex flex-center q-pa-md">
-      <div class="col-12">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-4">
         <videoCard :files="files" :showSticky.sync="showSticky"/>
-        <q-btn v-if="!showSticky" rounded color="primary" class="full-width q-mt-md" :label="$t('choose_file')" >
+        <q-btn v-if="!showSticky" rounded color="primary" class="full-width q-mt-md" :label="$t('action.chooseFile')" >
           <fileInput v-model="files"/>
         </q-btn>
       </div>
@@ -42,21 +42,21 @@ export default {
       offset: [18, 18],
       scrollOffset: 150,
       videoSrc: 'https://237005722.github.io/video-to-audio/peerless-master.mp4',
-      files: null, // obj
+      files: null // obj
     }
   },
   watch: {
-    files(val, old) {
+    files (val, old) {
       console.log('PageIndex watch files', val)
     },
-    showSticky(val, old) {
+    showSticky (val, old) {
       console.log('PageIndex watch showSticky', val)
     }
   },
-  created() {
+  created () {
 
   },
-  beforeDestroy() {
+  beforeDestroy () {
 
   }
 }
