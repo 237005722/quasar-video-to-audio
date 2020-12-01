@@ -8,7 +8,15 @@
     <div class="row flex flex-center q-pa-md">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4">
         <videoCard :files="files" :showSticky.sync="showSticky"/>
-        <q-btn v-if="!showSticky" rounded color="primary" class="full-width q-mt-md" :label="$t('action.chooseFile')" >
+        <q-btn
+          v-if="!showSticky"
+          :label="$t('action.chooseFile')"
+          rounded
+          push
+          ripple
+          color="primary"
+          class="full-width q-mt-md"
+        >
           <fileInput v-model="files"/>
         </q-btn>
       </div>

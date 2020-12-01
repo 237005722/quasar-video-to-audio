@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import messages from 'src/i18n'
@@ -12,7 +13,8 @@ console.log('locale', locale)
 const i18n = new VueI18n({
   locale: locale,
   fallbackLocale: locale,
-  messages
+  messages,
+  silentTranslationWarn: true
 })
 
 export default async ({ app }) => {
