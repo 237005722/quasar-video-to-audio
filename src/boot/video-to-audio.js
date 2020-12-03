@@ -4,7 +4,7 @@
  * creater：qc
  * reference：//github.com/mdn/webaudio-examples/tree/master/offline-audio-context-promise
 */
-const videoToAudio = async (file) => {
+const videoToAudio = async(file) => {
   try {
     console.log('videoToAudio file', file)
     const decodedAudioData = await decodedData(file)
@@ -22,7 +22,7 @@ const videoToAudio = async (file) => {
     console.log('videoToAudio finally')
   }
 }
-const decodedData = async (file) => {
+const decodedData = async(file) => {
   try {
     console.log('videoToAudio file', file)
     const fileData = new Blob([file]) // video file
@@ -49,7 +49,7 @@ const decodedData = async (file) => {
     console.log('decodedData finally')
   }
 }
-const dataToAudio = async (decodedAudioData) => {
+const dataToAudio = async(decodedAudioData) => {
   try {
     console.log('decodedAudioData', decodedAudioData)
     const duration = durationTrans(decodedAudioData.duration)

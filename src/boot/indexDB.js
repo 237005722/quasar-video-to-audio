@@ -19,7 +19,7 @@ const indexDB = {
   IDBKeyRange: window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange, // 键范围
 
   // 初始化
-  initDB (myDB, callback) {
+  initDB(myDB, callback) {
     if (!this.myDB) {
       this.openDB(myDB, callback)
     } else {
@@ -28,7 +28,7 @@ const indexDB = {
     }
   },
   // 建立或打开数据库，建立对象存储空间(ObjectStore)
-  openDB (myDB, callback) {
+  openDB(myDB, callback) {
     this.myDB = myDB
     const version = this.myDB.version || 1
     const request = this.indexedDB.open(this.myDB.name, version)
@@ -53,21 +53,21 @@ const indexDB = {
   },
 
   // 删除数据库
-  deleteDB () {
+  deleteDB() {
     this.myDB && this.indexedDB.deleteDatabase(this.myDB.name)
     console.log('deleteDB', this.myDB.name)
     this.myDB = null
   },
 
   // 关闭数据库
-  closeDB () {
+  closeDB() {
     this.myDB && this.myDB.db.close()
     console.log('closeDB', this.myDB.db)
     this.myDB = null
   },
 
   // 添加数据，重复添加会报错
-  addData (data) {
+  addData(data) {
     const store = this.myDB.db.transaction(this.myDB.ojstore.name, 'readwrite').objectStore(this.myDB.ojstore.name)
     let request
     for (var i = 0; i < data.length; i++) {
@@ -83,7 +83,7 @@ const indexDB = {
   },
 
   // 添加数据，重复添加会更新原有数据
-  putData (modData) {
+  putData(modData) {
     if (modData.id) {
       this.getDataByKey(modData.id, (store, res) => {
         if (res) {
@@ -99,7 +99,7 @@ const indexDB = {
   },
 
   // 获取所有数据
-  getAllData (callback) {
+  getAllData(callback) {
     const store = this.myDB.db.transaction(this.myDB.ojstore.name, 'readwrite').objectStore(this.myDB.ojstore.name)
     const allRecords = store.getAll()
     allRecords.onsuccess = () => {
@@ -111,7 +111,7 @@ const indexDB = {
   },
 
   // 根据存储空间的键找到对应数据
-  getDataByKey (key, callback) {
+  getDataByKey(key, callback) {
     const store = this.myDB.db.transaction(this.myDB.ojstore.name, 'readwrite').objectStore(this.myDB.ojstore.name)
     const request = store.get(key)
     request.onerror = (error) => {
@@ -130,14 +130,14 @@ const indexDB = {
   },
 
   // 删除某一条记录
-  deleteData (key) {
+  deleteData(key) {
     const store = this.myDB.db.transaction(this.myDB.ojstore.name, 'readwrite').objectStore(this.myDB.ojstore.name)
     store.delete(key)
     console.log('deleteData' + this.myDB.ojstore.name + '中' + key + '记录')
   },
 
   // 删除存储空间全部记录
-  clearData () {
+  clearData() {
     const store = this.myDB.db.transaction(this.myDB.ojstore.name, 'readwrite').objectStore(this.myDB.ojstore.name)
     store.clear()
     console.log('clearData' + this.myDB.ojstore.name + '全部记录')
@@ -147,7 +147,7 @@ const indexDB = {
 
 // "async" is optional
 // more info on params: https://quasar.dev/quasar-cli/boot-files
-export default async ({ app, router, store, Vue }) => {
+export default async({ app, router, store, Vue }) => {
   // something to do
   Vue.prototype.$myDB = myDB
   Vue.prototype.$indexDB = indexDB

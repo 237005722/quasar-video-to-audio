@@ -1,13 +1,13 @@
 <template>
   <div>
     <q-input
-      @input="val => { files = val }"
       multiple
       filled
       type="file"
       accept="video/*,audio/*"
       hint="Native file (multiple)"
       class="my-input-file"
+      @input="val => { files = val }"
     />
   </div>
 </template>
@@ -15,22 +15,22 @@
 <script>
 export default {
   name: 'FileInput',
-  data () {
+  data() {
     return {
       files: null
     }
   },
   watch: {
-    files (val, old) {
+    files(val, old) {
       if (val && val !== old) {
         this.$emit('input', val)
       }
     }
   },
-  created () {
+  created() {
 
   },
-  destroyed () {
+  destroyed() {
 
   }
 }

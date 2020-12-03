@@ -1,19 +1,20 @@
 <template>
   <div>
     <q-card v-if="fileList.length === 0" class="my-card no-shadow q-mb-md q-pt-md q-pl-md q-pr-md">
-      <q-skeleton height="180px" square/>
+      <q-skeleton height="180px" square />
       <q-card-section>
         <q-skeleton
           type="circle"
           size="60px"
           class="absolute"
-          style="top: 0; right: 12px; transform: translateY(-50%);"/>
+          style="top: 0; right: 12px; transform: translateY(-50%);"
+        />
         <q-skeleton type="rect" class="q-pt-md" />
       </q-card-section>
     </q-card>
 
     <q-card v-for="(item, index) in fileList" :key="item.name" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
-      <q-video :src="item.src" class="q-pt-md"/>
+      <q-video :src="item.src" class="q-pt-md" />
       <q-card-section>
         <q-btn
           :disable="loading"
@@ -30,7 +31,9 @@
           <template v-slot:loading>
             <q-spinner-facebook />
           </template>
-          <q-tooltip content-class="bg-negative">{{$t('action.delVideo')}}</q-tooltip>
+          <q-tooltip content-class="bg-negative">
+            {{ $t('action.delVideo') }}
+          </q-tooltip>
         </q-btn>
         <q-btn
           :disable="loading"
@@ -47,17 +50,21 @@
           <template v-slot:loading>
             <q-spinner-facebook />
           </template>
-          <q-tooltip content-class="bg-primary">{{$t('action.videoToAudio')}}</q-tooltip>
+          <q-tooltip content-class="bg-primary">
+            {{ $t('action.videoToAudio') }}
+          </q-tooltip>
         </q-btn>
         <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis"> {{ item.name }} </div>
+          <div class="col text-h6 ellipsis">
+            {{ item.name }}
+          </div>
         </div>
         <div class="text-subtitle2">
           {{ item.duration || '00:00:00' }}
         </div>
       </q-card-section>
-      <template v-if="item.audioSrc" >
-        <q-video :src="item.audioSrc"/>
+      <template v-if="item.audioSrc">
+        <q-video :src="item.audioSrc" />
         <q-card-section>
           <q-btn
             :disable="loading"
@@ -74,14 +81,18 @@
             <template v-slot:loading>
               <q-spinner-facebook />
             </template>
-            <q-tooltip content-class="bg-secondary">{{$t('action.downloadAudio')}}</q-tooltip>
+            <q-tooltip content-class="bg-secondary">
+              {{ $t('action.downloadAudio') }}
+            </q-tooltip>
           </q-btn>
-        <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis"> {{ item.audioName }} </div>
-        </div>
-        <div class="text-subtitle2">
-          {{ item.duration || '00:00:00' }}
-        </div>
+          <div class="row no-wrap items-center">
+            <div class="col text-h6 ellipsis">
+              {{ item.audioName }}
+            </div>
+          </div>
+          <div class="text-subtitle2">
+            {{ item.duration || '00:00:00' }}
+          </div>
         </q-card-section>
       </template>
     </q-card>
@@ -101,20 +112,20 @@ export default {
       default: () => false
     }
   },
-  data () {
+  data() {
     return {
       loading: false,
       fileList: []
     }
   },
   watch: {
-    files (val, old) {
+    files(val, old) {
       console.log('VideoCard watch files', val)
       if (val && val !== old) {
         this.initFileList(val)
       }
     },
-    fileList (val, old) {
+    fileList(val, old) {
       console.log('VideoCard watch fileList', val)
       if (val && val.length > 1) {
         this.$emit('update:showSticky', true)
@@ -123,7 +134,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     console.log('created')
     this.$indexDB.initDB(this.$myDB, () => {
       this.$indexDB.getDataByKey('fileList', (store, res) => {
@@ -136,12 +147,12 @@ export default {
       })
     })
   },
-  destroyed () {
+  destroyed() {
     console.log('destroyed')
     this.$indexDB.closeDB()
   },
   methods: {
-    async initFileList (files = this.files) {
+    async initFileList(files = this.files) {
       this.loading = true
       await Object.keys(files).map(key => {
         const file = files[key]
@@ -152,7 +163,7 @@ export default {
       this.cacheFileList()
       this.loading = false
     },
-    initFileItem (file) {
+    initFileItem(file) {
       this.fileList.push({
         file: file,
         name: file.name,
@@ -164,7 +175,7 @@ export default {
         audioSrc: null
       })
     },
-    initFileData () {
+    initFileData() {
       this.fileList.map(item => {
         if (!item.data) {
           this.$videoTool.decodedData(item.file).then(data => {
@@ -174,7 +185,7 @@ export default {
         }
       })
     },
-    delVideo (item, index) {
+    delVideo(item, index) {
       this.$q.dialog({
         title: `${this.$t('confirmTitle')}`,
         message: `${this.$t('action.delVideoConfirm')}`,
@@ -195,7 +206,7 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
-    videoToAudio (item) {
+    videoToAudio(item) {
       this.loading = true
       if (item.data) {
         this.$videoTool.dataToAudio(item.data, item.name).then(audio => {
@@ -210,7 +221,7 @@ export default {
       }
       this.loading = false
     },
-    updateFileData (audio, item) {
+    updateFileData(audio, item) {
       if (audio) {
         item.audioBlob = audio.blob
         item.audioSrc = URL.createObjectURL(audio.blob)
@@ -231,12 +242,12 @@ export default {
         })
       }
     },
-    downloadAudio (item) {
+    downloadAudio(item) {
       this.loading = true
       this.$videoTool.downloadWav(item.audioBlob, item.name)
       this.loading = false
     },
-    cacheFileList () {
+    cacheFileList() {
       const modData = []
       this.fileList.map(item => {
         modData.push(item.file)

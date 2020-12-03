@@ -1,6 +1,5 @@
 <template>
   <q-layout view="hHh lpR fFf">
-
     <q-header elevated reveal :reveal-offset="300" class="bg-transparent text-primary">
       <q-toolbar>
         <router-link
@@ -12,15 +11,18 @@
         </router-link>
         <q-space />
         <q-btn push color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right">
-          <q-tooltip content-class="bg-primary">{{$t('settingsDesc')}}</q-tooltip>
+          <q-tooltip content-class="bg-primary">
+            {{ $t('settingsDesc') }}
+          </q-tooltip>
         </q-btn>
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      elevated
       v-model="right"
-      side="right">
+      elevated
+      side="right"
+    >
       <!-- drawer content -->
       <q-scroll-area
         :thumb-style="thumbStyle"
@@ -28,44 +30,56 @@
         class="fit"
       >
         <q-list>
-          <q-item-label header>{{$t('setting.settings')}}</q-item-label>
-          <q-item clickable v-close-popup tabindex="1" @click="toggleDarkMode">
+          <q-item-label header>
+            {{ $t('setting.settings') }}
+          </q-item-label>
+          <q-item v-close-popup clickable tabindex="1" @click="toggleDarkMode">
             <q-item-section avatar>
               <q-avatar icon="lightbulb_outline" color="secondary" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$q.dark.isActive ? $t('setting.dayMode') : $t('setting.nightMode')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$q.dark.isActive ? $t('setting.nightMode') : $t('setting.dayMode')}}</q-item-label>
+              <q-item-label>{{ $q.dark.isActive ? $t('setting.dayMode') : $t('setting.nightMode') }}</q-item-label>
+              <q-item-label caption>
+                {{ $t('setting.currentlyIn') }} {{ $q.dark.isActive ? $t('setting.nightMode') : $t('setting.dayMode') }}
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-separator inset spaced />
-          <q-item clickable v-close-popup tabindex="2" @click="$q.fullscreen.toggle()">
+          <q-item v-close-popup clickable tabindex="2" @click="$q.fullscreen.toggle()">
             <q-item-section avatar>
               <q-avatar :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'" color="primary" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$q.fullscreen.isActive ? $t('setting.normalMode') : $t('setting.fullScreenMode')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$q.fullscreen.isActive ? $t('setting.fullScreenMode') : $t('setting.normalMode')}}</q-item-label>
+              <q-item-label>{{ $q.fullscreen.isActive ? $t('setting.normalMode') : $t('setting.fullScreenMode') }}</q-item-label>
+              <q-item-label caption>
+                {{ $t('setting.currentlyIn') }} {{ $q.fullscreen.isActive ? $t('setting.fullScreenMode') : $t('setting.normalMode') }}
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-separator inset spaced />
-          <q-item-label header>{{$t('setting.language')}}</q-item-label>
-          <q-item tag="label" v-close-popup tabindex="3">
+          <q-item-label header>
+            {{ $t('setting.language') }}
+          </q-item-label>
+          <q-item v-close-popup tag="label" tabindex="3">
             <q-item-section avatar>
               <q-radio v-model="lang" val="en-us" color="accent" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$t('setting.enUs')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$t('setting.enUs')}}</q-item-label>
+              <q-item-label>{{ $t('setting.enUs') }}</q-item-label>
+              <q-item-label caption>
+                {{ $t('setting.currentlyIn') }} {{ $t('setting.enUs') }}
+              </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item tag="label" v-close-popup tabindex="4">
+          <q-item v-close-popup tag="label" tabindex="4">
             <q-item-section avatar>
               <q-radio v-model="lang" val="zh-hans" color="negative" text-color="white" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{$t('setting.zhSimple')}}</q-item-label>
-              <q-item-label caption>{{$t('setting.currentlyIn')}} {{$t('setting.zhSimple')}}</q-item-label>
+              <q-item-label>{{ $t('setting.zhSimple') }}</q-item-label>
+              <q-item-label caption>
+                {{ $t('setting.currentlyIn') }} {{ $t('setting.zhSimple') }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -75,7 +89,6 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
@@ -83,8 +96,17 @@
 import * as INFO from '../../package.json'
 export default {
   name: 'MainLayout',
+
+  data() {
+    return {
+      title: INFO.productName,
+      searchText: '',
+      lang: this.$i18n.locale,
+      right: false
+    }
+  },
   computed: {
-    thumbStyle () {
+    thumbStyle() {
       return {
         right: '4px',
         borderRadius: '5px',
@@ -95,7 +117,7 @@ export default {
       }
     },
 
-    barStyle () {
+    barStyle() {
       return {
         right: '2px',
         borderRadius: '9px',
@@ -105,25 +127,16 @@ export default {
       }
     }
   },
-
-  data () {
-    return {
-      title: INFO.productName,
-      searchText: '',
-      lang: this.$i18n.locale,
-      right: false
-    }
-  },
   watch: {
-    '$q.dark.isActive' (val) {
+    '$q.dark.isActive'(val) {
       console.log(val ? 'On dark mode' : 'On light mode')
       this.right = !this.right
     },
-    '$q.fullscreen.isActive' (val) {
+    '$q.fullscreen.isActive'(val) {
       console.log(val ? 'In fullscreen now' : 'Exited fullscreen')
       this.right = !this.right
     },
-    lang (lang) {
+    lang(lang) {
       // console.log('lang', lang)
       this.$q.localStorage.set('lang', lang)
       // dynamic import, so loading on demand only
@@ -132,17 +145,17 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     this.lang = this.$i18n.locale
     console.log('lang', this.lang)
 
     this.query = this.$route.query
     console.log('mainlayout query', this.query)
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    toggleDarkMode () {
+    toggleDarkMode() {
       // get status
       // console.log(this.$q.dark.isActive) // true, false
       // get configured status
