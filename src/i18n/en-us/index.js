@@ -2,7 +2,9 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-export default {
+import routes from './routes'
+
+const index = {
   title: 'ViToAu App',
   failed: 'Video to audio failed',
   success: 'Video to audio was successful',
@@ -30,4 +32,9 @@ export default {
     videoToAudio: 'Video to audio',
     downloadAudio: 'Download audio'
   }
+}
+
+export default {
+  ...index,
+  ...routes
 }

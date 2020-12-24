@@ -10,7 +10,7 @@
 /* eslint-env node */
 const path = require('path')
 
-module.exports = function (/* ctx */) {
+module.exports = function(/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -22,7 +22,7 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-
+      'addressbar-color',
       'i18n',
       'axios',
       'indexDB',
@@ -69,7 +69,7 @@ module.exports = function (/* ctx */) {
       // extractCSS: false,
 
       // https://quasar.dev/quasar-cli/handling-webpack
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -96,7 +96,14 @@ module.exports = function (/* ctx */) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
+      config: {
+        loadingBar: {
+          /* look at QUASARCONFOPTIONS from the API card (bottom of page) */
+          color: 'orange',
+          size: '12px',
+          position: 'bottom'
+        }
+      },
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
@@ -112,6 +119,8 @@ module.exports = function (/* ctx */) {
 
       // Quasar plugins
       plugins: [
+        'AddressbarColor',
+        'LoadingBar',
         'LocalStorage',
         'SessionStorage',
         'AppFullscreen',
@@ -207,7 +216,7 @@ module.exports = function (/* ctx */) {
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack (/* cfg */) {
+      extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }

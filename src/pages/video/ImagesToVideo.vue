@@ -1,12 +1,11 @@
 <template>
   <q-page :class="$q.dark.isActive ? '' : 'bg-grey-2'">
-    <!-- <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    > -->
     <div class="row flex flex-center q-pa-md">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-        <productCard />
+        <img
+          alt="Quasar logo"
+          src="~assets/quasar-logo-full.svg"
+        >
       </div>
     </div>
     <q-page-scroller position="bottom-right" :scroll-offset="scrollOffset" :offset="offset">
@@ -16,11 +15,10 @@
 </template>
 
 <script>
-import productCard from 'components/ProductCard'
 export default {
-  name: 'PageIndex',
+  name: 'ImagesToVideo',
   components: {
-    productCard
+
   },
   data() {
     return {
@@ -28,14 +26,27 @@ export default {
       scrollOffset: 150
     }
   },
+  computed: {
+
+  },
   watch: {
 
   },
   created() {
 
   },
-  beforeDestroy() {
+  destroyed() {
+
+  },
+  mounted() {
+
+  },
+  methods: {
 
   }
 }
 </script>
+
+<style scoped lang='sass'>
+
+</style>

@@ -262,8 +262,5 @@ export default {
 }
 </script>
 <style scoped lang="sass">
-  .my-card
-    width: 100%
-    border-radius: 0.5rem
 
 </style>

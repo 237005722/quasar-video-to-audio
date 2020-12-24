@@ -12,7 +12,7 @@
         <q-space />
         <q-btn push color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right">
           <q-tooltip content-class="bg-primary">
-            {{ $t('settingsDesc') }}
+            {{ $t('setting.settingsDesc') }}
           </q-tooltip>
         </q-btn>
       </q-toolbar>
@@ -96,7 +96,6 @@
 import * as INFO from '../../package.json'
 export default {
   name: 'MainLayout',
-
   data() {
     return {
       title: INFO.productName,
@@ -111,12 +110,9 @@ export default {
         right: '4px',
         borderRadius: '5px',
         backgroundColor: '#369cf5',
-        width: '5px',
-        opacity: 0.75,
-        page: 'homepage'
+        width: '8px'
       }
     },
-
     barStyle() {
       return {
         right: '2px',
@@ -130,6 +126,7 @@ export default {
   watch: {
     '$q.dark.isActive'(val) {
       console.log(val ? 'On dark mode' : 'On light mode')
+      this.$q.localStorage.set('dark', val)
       this.right = !this.right
     },
     '$q.fullscreen.isActive'(val) {
@@ -137,12 +134,13 @@ export default {
       this.right = !this.right
     },
     lang(lang) {
-      // console.log('lang', lang)
+      console.log('lang', lang)
       this.$q.localStorage.set('lang', lang)
       // dynamic import, so loading on demand only
       import('quasar/lang/' + lang).then(lang => {
         this.$i18n.locale = lang.default.isoName
       })
+      this.right = !this.right
     }
   },
   created() {

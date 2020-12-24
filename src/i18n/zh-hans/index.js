@@ -2,7 +2,9 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-export default {
+import routes from './routes'
+
+const index = {
   title: '视频转音频',
   failed: '转换音频失败',
   success: '转换音频成功',
@@ -30,4 +32,9 @@ export default {
     videoToAudio: '视频转音频',
     downloadAudio: '下载音频'
   }
+}
+
+export default {
+  ...index,
+  ...routes
 }
