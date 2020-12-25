@@ -5,9 +5,7 @@
 import routes from './routes'
 
 const index = {
-  title: 'ViToAu App',
-  failed: 'Video to audio failed',
-  success: 'Video to audio was successful',
+  title: 'Video Audio',
   confirmTitle: 'Confirm',
   confirmOk: 'OK',
   confirmCancel: 'Cancel',
@@ -25,12 +23,28 @@ const index = {
     enUs: 'English (US)'
   },
 
-  action: {
+  actionVideo: {
     chooseFile: 'Choose video file',
     delVideo: 'Delete video',
     delVideoConfirm: 'Would you like to delete the video?',
     videoToAudio: 'Video to audio',
-    downloadAudio: 'Download audio'
+    downloadAudio: 'Download audio',
+    failed: 'Video to audio failed',
+    success: 'Video to audio was successful'
+  },
+
+  actionImages: {
+    chooseFile: 'Choose images file',
+    noFileError: 'Please select image file first',
+    delImages: 'Delete images',
+    delImagesConfirm: 'Would you like to delete the images?',
+    imagesToVideo: 'Images to video',
+    startImagesToVideo: 'Start images to video',
+    stopImagesToVideo: 'Stop images to video',
+    downloadVideo: 'Download video',
+    intanceError: 'Initialization failed',
+    failed: 'Images to video failed',
+    success: 'Images to video was successful'
   }
 }
 

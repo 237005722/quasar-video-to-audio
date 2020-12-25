@@ -3,16 +3,16 @@ export default {
     {
       name: `videoToAudio`,
       url: `/videoToAudio`,
-      img: `https://cdn.quasar.dev/img/parallax2.jpg`,
+      img: `5d15b42402b38.gif`,
       title: `Video To Audio`,
       desc: `The selected video is directly and locally and losslessly converted into audio wav format. The mobile browser whose video dom is hijacked does not support it (such as WeChat built-in browser, UC browser, etc.).`
     },
     {
       name: `imagesToVideo`,
       url: `/imagesToVideo`,
-      img: `https://cdn.quasar.dev/img/parallax2.jpg`,
+      img: `5d15b42402b38.gif`,
       title: `Images To Video`,
-      desc: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+      desc: `Convert the selected picture into mp4 format through recording, currently does not support merging audio.`
     }
   ]
 }

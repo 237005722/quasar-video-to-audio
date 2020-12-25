@@ -1,10 +1,10 @@
 <template>
   <div>
     <q-input
+      :accept="accept"
       multiple
       filled
       type="file"
-      accept="video/*,audio/*"
       hint="Native file (multiple)"
       class="my-input-file"
       @input="val => { files = val }"
@@ -15,6 +15,12 @@
 <script>
 export default {
   name: 'FileInput',
+  props: {
+    accept: {
+      type: [String],
+      default: () => 'video/*,audio/*'
+    }
+  },
   data() {
     return {
       files: null
@@ -45,5 +51,4 @@ export default {
     opacity: 0
     filter: alpha(opacity=0)
     cursor: pointer
-
 </style>

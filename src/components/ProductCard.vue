@@ -5,16 +5,16 @@
       :key="item.name"
       class="my-card no-shadow q-mb-md"
     >
-      <q-parallax
-        :src="item.img"
-        :height="150"
-      />
       <router-link
         :to="item.url"
         exact
         class="text-primary"
         active-class="text-negative"
       >
+        <q-parallax
+          :src="item.img"
+          :height="150"
+        />
         <q-card-section>
           <div class="text-h6">
             {{ item.title }}

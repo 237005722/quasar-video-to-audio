@@ -1,6 +1,7 @@
 // app global css in SCSS form
 a {
   text-decoration: none !important;
+  border-radius: inherit;
 }
 .body--dark {
   .q-card,.bg-white {

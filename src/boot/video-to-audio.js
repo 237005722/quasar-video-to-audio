@@ -100,7 +100,7 @@ const downloadWav = (blob, name = 'audio') => {
       window.URL.revokeObjectURL(url)
       document.body.removeChild(anchor)
     } else {
-      navigator.msSaveBlob(blob, name)
+      navigator.msSaveBlob(blob, name + '.wav')
     }
   } catch (error) {
     console.log('downloadWav error', error)

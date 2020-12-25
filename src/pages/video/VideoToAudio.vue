@@ -5,7 +5,7 @@
         <videoCard :files="files" :show-sticky.sync="showSticky" />
         <q-btn
           v-if="!showSticky"
-          :label="$t('action.chooseFile')"
+          :label="$t('actionVideo.chooseFile')"
           rounded
           push
           ripple
@@ -32,7 +32,7 @@
 import videoCard from 'components/VideoCard'
 import fileInput from 'components/FileInput'
 export default {
-  name: 'AudioToVideo',
+  name: 'VideoToAudio',
   components: {
     videoCard,
     fileInput

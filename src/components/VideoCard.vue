@@ -32,7 +32,7 @@
             <q-spinner-facebook />
           </template>
           <q-tooltip content-class="bg-negative">
-            {{ $t('action.delVideo') }}
+            {{ $t('actionVideo.delVideo') }}
           </q-tooltip>
         </q-btn>
         <q-btn
@@ -51,7 +51,7 @@
             <q-spinner-facebook />
           </template>
           <q-tooltip content-class="bg-primary">
-            {{ $t('action.videoToAudio') }}
+            {{ $t('actionVideo.videoToAudio') }}
           </q-tooltip>
         </q-btn>
         <div class="row no-wrap items-center">
@@ -82,7 +82,7 @@
               <q-spinner-facebook />
             </template>
             <q-tooltip content-class="bg-secondary">
-              {{ $t('action.downloadAudio') }}
+              {{ $t('actionVideo.downloadAudio') }}
             </q-tooltip>
           </q-btn>
           <div class="row no-wrap items-center">
@@ -188,7 +188,7 @@ export default {
     delVideo(item, index) {
       this.$q.dialog({
         title: `${this.$t('confirmTitle')}`,
-        message: `${this.$t('action.delVideoConfirm')}`,
+        message: `${this.$t('actionVideo.delVideoConfirm')}`,
         ok: `${this.$t('confirmOk')}`,
         cancel: `${this.$t('confirmCancel')}`,
         persistent: true
@@ -231,14 +231,14 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: `${this.$t('success')}`
+          message: `${this.$t('actionVideo.success')}`
         })
       } else {
         this.$q.notify({
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
-          message: `${this.$t('failed')}`
+          message: `${this.$t('actionVideo.failed')}`
         })
       }
     },
