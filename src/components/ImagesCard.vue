@@ -58,7 +58,7 @@
       </q-card-section>
     </q-card>
 
-    <q-card v-else id="canvasParent" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
+    <q-card v-else-if="fileList.length > 0 && step === 1" id="canvasParent" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
       <canvas id="myCanvas" class="q-mt-md myCanvas" :width="canvas.width" :height="canvas.height" />
       <q-card-section>
         <q-btn
