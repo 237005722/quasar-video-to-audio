@@ -9,6 +9,7 @@ const index = {
   confirmTitle: 'Confirm',
   confirmOk: 'OK',
   confirmCancel: 'Cancel',
+  back: 'Back',
 
   setting: {
     settings: 'Settings',
@@ -35,6 +36,7 @@ const index = {
 
   actionImages: {
     chooseFile: 'Choose images file',
+    fileTotal: 'Total pictures: ',
     noFileError: 'Please select image file first',
     delImages: 'Delete images',
     delImagesConfirm: 'Would you like to delete the images?',

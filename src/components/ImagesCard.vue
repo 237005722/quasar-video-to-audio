@@ -1,73 +1,114 @@
 <template>
   <div>
-    <q-card class="my-card no-shadow q-mb-md q-pt-md q-pl-md q-pr-md">
-      <div class="q-gutter-md row items-start">
-        <q-img
-          v-for="item in fileList"
-          :key="item.name"
-          :src="item.src"
-          :ratio="1"
-          style="width: 33%"
-          basic
-          spinner-color="white"
-          class="rounded-borders"
+    <q-card v-if="fileList.length === 0" class="my-card no-shadow q-mb-md q-pt-md q-pl-md q-pr-md q-pb-md">
+      <div class="row q-col-gutter-md">
+        <div
+          v-for="n in 5"
+          :key="`md-${n}`"
+          class="col-4"
         >
-          <div class="absolute-bottom text-center text-body2">
-            {{ item.name }}
-          </div>
-        </q-img>
+          <q-skeleton
+            type="QBtn"
+            width="100%"
+            height="100px"
+          />
+        </div>
       </div>
     </q-card>
-
-    <q-card class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
-      <canvas id="myCanvas" class="myCanvas" :width="canvas.width" :height="canvas.height" />
+    <q-card v-if="fileList.length > 0 && step === 0" class="my-card no-shadow q-mb-md q-pt-md q-pl-md q-pr-md">
+      <div class="row q-col-gutter-md">
+        <div
+          v-for="(item, index) in fileList"
+          :key="`${item.name}_${index}`"
+          class="col-4"
+        >
+          <q-img
+            :src="item.src"
+            :ratio="1"
+            style="width: 100%"
+            basic
+            spinner-color="white"
+            class="rounded-borders"
+          >
+            <div class="absolute-bottom text-center text-body2">
+              {{ item.name }}
+            </div>
+          </q-img>
+        </div>
+      </div>
       <q-card-section>
         <q-btn
           :disable="loading"
           :loading="loading"
-          push
-          round
-          ripple
-          color="negative"
-          icon="delete"
-          class="absolute"
-          style="top: 0; right: 80px; transform: translateY(-50%);"
-          @click="startRecord()"
-        >
-          <template v-slot:loading>
-            <q-spinner-facebook />
-          </template>
-          <q-tooltip content-class="bg-negative">
-            {{ $t('actionVideo.startImagesToVideo') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          :disable="loading"
-          :loading="loading"
-          push
           round
           ripple
           color="primary"
-          icon="audiotrack"
+          icon="arrow_forward"
           class="absolute"
           style="top: 0; right: 12px; transform: translateY(-50%);"
-          @click="stopRecord()"
+          @click="nextAction()"
         >
           <template v-slot:loading>
             <q-spinner-facebook />
           </template>
           <q-tooltip content-class="bg-primary">
-            {{ $t('actionVideo.stopImagesToVideo') }}
+            {{ $t('actionImages.imagesToVideo') }}
           </q-tooltip>
         </q-btn>
       </q-card-section>
-      <template v-if="video.blob">
-        <q-video :src="video.blob" class="q-pt-md" />
+    </q-card>
+
+    <q-card v-else id="canvasParent" class="my-card no-shadow q-mb-md q-pl-md q-pr-md">
+      <canvas id="myCanvas" class="q-mt-md myCanvas" :width="canvas.width" :height="canvas.height" />
+      <q-card-section>
+        <q-btn
+          :disable="loading"
+          :loading="loading"
+          round
+          ripple
+          color="info"
+          icon="arrow_back"
+          class="absolute"
+          style="top: 0; right: 80px; transform: translateY(-50%);"
+          @click="prevAction()"
+        >
+          <template v-slot:loading>
+            <q-spinner-facebook />
+          </template>
+          <q-tooltip content-class="bg-info">
+            {{ $t('actionImages.chooseFile') }}
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          :disable="loading"
+          :loading="loading"
+          round
+          ripple
+          color="primary"
+          icon="videocam"
+          class="absolute"
+          style="top: 0; right: 12px; transform: translateY(-50%);"
+          @click="startRecord()"
+        >
+          <template v-slot:loading>
+            <q-spinner-facebook />
+          </template>
+          <q-tooltip content-class="bg-primary">
+            {{ $t('actionImages.startImagesToVideo') }}
+          </q-tooltip>
+        </q-btn>
+        <div class="row no-wrap items-center">
+          <div class="col text-h6 ellipsis">
+            {{ $t('actionImages.fileTotal') }} {{ fileList.length }}
+          </div>
+        </div>
+      </q-card-section>
+      <template v-if="video.src">
+        <q-video :src="video.src" class="q-pt-md" />
         <q-card-section>
           <q-btn
             :disable="loading"
             :loading="loading"
-            push
             round
             ripple
             color="primary"
@@ -88,9 +129,6 @@
               {{ video.name }}
             </div>
           </div>
-          <div class="text-subtitle2">
-            {{ video.duration || '00:00:00' }}
-          </div>
         </q-card-section>
       </template>
     </q-card>
@@ -105,6 +143,10 @@ export default {
       type: [FileList, Object],
       default: () => {}
     },
+    showChoose: {
+      type: [Boolean],
+      default: () => false
+    },
     showSticky: {
       type: [Boolean],
       default: () => false
@@ -115,15 +157,16 @@ export default {
       loading: false,
       fileList: [],
       canvas: {
-        width: 640,
-        height: 360
+        width: 336,
+        height: 168
       },
       video: {
         name: '',
         blob: '',
-        duration: ''
+        src: ''
       },
-      intance: null
+      intance: null,
+      step: 0
     }
   },
   watch: {
@@ -135,15 +178,23 @@ export default {
     },
     fileList(val, old) {
       console.log('ImagesCard watch fileList', val)
-      if (val && val.length > 1) {
+      if (val && val.length > 9) {
         this.$emit('update:showSticky', true)
       } else {
         this.$emit('update:showSticky', false)
       }
+    },
+    step(val, old) {
+      this.$emit('update:showChoose', val === 0)
+      if (val === 1) {
+        this.$nextTick(() => {
+          this.initCanvas()
+        })
+      }
     }
   },
-  created() {
-    console.log('created')
+  mounted() {
+    console.log('mounted')
     this.$indexDB.initDB(this.$myDB, () => {
       this.$indexDB.getDataByKey('imagesFileList', (store, res) => {
         if (res && res.data) {
@@ -159,15 +210,26 @@ export default {
     this.$indexDB.closeDB()
   },
   methods: {
+    initCanvas() {
+      const parent = document.getElementById('canvasParent')
+      this.canvas.width = parent.clientWidth - 32
+      // this.canvas.height = this.canvas.width * 2 // parent.clientHeight - 16
+      this.canvas.height = this.canvas.width / 2 // parent.clientHeight - 16
+    },
     async initFileList(files = this.files) {
-      this.loading = true
-      await Object.keys(files).map(key => {
-        const file = files[key]
-        this.initFileItem(file)
-      })
-      console.log('initFileList cacheFileList')
-      this.cacheFileList()
-      this.loading = false
+      try {
+        this.loading = true
+        await Object.keys(files).map(key => {
+          const file = files[key]
+          this.initFileItem(file)
+        })
+        console.log('initFileList cacheFileList')
+        this.cacheFileList()
+      } catch (error) {
+        console.log('initFileList error', error)
+      } finally {
+        this.loading = false
+      }
     },
     initFileItem(file) {
       this.fileList.push({
@@ -176,41 +238,51 @@ export default {
         src: URL.createObjectURL(file)
       })
     },
-    startRecord() {
-      this.loading = true
-      const fileList = []
-      this.fileList.map(file => {
-        fileList.push(file)
-      })
-      if (fileList.length === 0) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: `${this.$t('actionImages.noFileError')}`
-        })
-        return
-      }
-      this.intance = this.$imagesTovideo.init(document.getElementById('myCanvas'), fileList)
-      if (!this.intance) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: `${this.$t('actionImages.intanceError')}`
-        })
-        return
-      }
-      this.intance.startRecord()
-      this.loading = false
+    nextAction() {
+      this.step = 1
     },
-    stopRecord() {
-      this.intance && (this.video = this.intance.stopRecord())
+    prevAction() {
+      this.step = 0
+    },
+    async startRecord() {
+      try {
+        this.loading = true
+        if (this.fileList.length === 0) {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'warning',
+            message: `${this.$t('actionImages.noFileError')}`
+          })
+          return
+        }
+        this.video = await this.$imagesTovideo.startRecord(document.getElementById('myCanvas'), this.fileList)
+        console.log('startRecord this.video', this.video)
+        if (this.video) {
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'done',
+            message: `${this.$t('actionImages.success')}`
+          })
+        } else {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'warning',
+            message: `${this.$t('actionImages.failed')}`
+          })
+        }
+      } catch (error) {
+        console.log('startRecord error', error)
+      } finally {
+        this.loading = false
+      }
     },
     downloadVideo() {
       this.loading = true
-      if (this.video && this.video.blob) {
-        this.$imagesTovideo.downloadVideo(this.video)
+      if (this.video) {
+        this.$imagesTovideo.downloadVideo({ name: this.video.name, blob: this.video.blob })
       }
       this.loading = false
     },
@@ -230,6 +302,5 @@ export default {
 </script>
 <style scoped lang="sass">
 .myCanvas
-  background-color: #f0f0f0
-  border-radius: 4px
+  background-color: #f5f5f5
 </style>

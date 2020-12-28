@@ -1,16 +1,15 @@
 // import something here
 /**
- * 实例化图片转视频
- * 步骤：1、实例化 2、调用intance.startRecord() 3、调用intance.stopRecord() 4、下载
+ * 图片转视频
  */
-const init = (canvas, fileList) => {
+const startRecord = (canvas, fileList) => {
   try {
     const intance = new ImagesToVideo(canvas, { fileList })
-    return intance
+    return intance.startRecord()
   } catch (error) {
-    console.log('init error', error)
+    console.log('startRecord error', error)
   } finally {
-    console.log('init finally')
+    console.log('startRecord finally')
   }
   return null
 }
@@ -60,7 +59,8 @@ class ImagesToVideo {
   // 配置属性
   option = {
     intervals: 100, // 视频抓取间隔毫秒
-    drawIntervals: 2000, // 轮询绘图间隔毫秒
+    drawIntervals: 1000, // 轮询绘图间隔毫秒
+    // 注意，此对象列表是已经封装处理过的了，不是[Object File]，而是对象{file: file, name: file.name, src: URL.createObjectURL(file)}
     fileList: [], // 选择的本地图片对象列表
     fileDownload: {
       fileType: 'mp4',
@@ -98,6 +98,7 @@ class ImagesToVideo {
       videoBitsPerSecond: 8500000
     })
     this.mediaRecord.ondataavailable = (e) => { // 接收数据
+      // console.log('ondataavailable e', e)
       this.chunks.add(e.data)
     }
     console.log('initMedia success')
@@ -108,21 +109,20 @@ class ImagesToVideo {
   */
   async drawImage(file) {
     try {
+      let src
+      if (Object.prototype.toString.call(file) === '[object File]') {
+        src = URL.createObjectURL(file)
+      } else {
+        src = file.src
+      }
       console.log('drawImage file', file)
-      const fileData = new Blob([file])
-      // 解析图片流
-      const dataUrl = await new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.onload = () => {
-          resolve(reader.result)
-        }
-        reader.readAsArrayBuffer(fileData)
-      })
+      const dataUrl = src
       // 绘制图片流
       await new Promise((resolve) => {
         const img = new Image()
         img.onload = () => {
-          this.ctx.drawImage(img, 0, 0, img.width, img.height)
+          // this.ctx.drawImage(img, 0, 0, img.width, img.height)
+          this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
           // resolve(true)
         }
         img.src = dataUrl
@@ -137,36 +137,45 @@ class ImagesToVideo {
   /**
    * 开始录屏，参数为抓取间隔毫秒，默认100毫秒
   */
-  startRecord() {
+  async startRecord() {
     this.mediaRecord && this.mediaRecord.start(this.option.intervals || 100)
     // 轮询绘图
-    let index = 0
+    let index = 0 // this.option.fileList.length - 1
     this.timer && clearInterval(this.timer)
-    this.timer = setInterval(() => {
-      const file = this.option.fileList[index] || null
-      file ? (this.drawImage(file) && (index += 1)) : clearInterval(this.timer)
-    }, this.option.drawIntervals || 2000)
+    return await new Promise((resolve) => {
+      this.timer = setInterval(() => {
+        const file = this.option.fileList[index] || null
+        if (file) {
+          this.drawImage(file)
+          index += 1
+        } else {
+          resolve(this.stopRecord())
+        }
+      }, this.option.drawIntervals || 1000)
+    })
   }
 
   /**
    * 停止录屏，并返回视频对象
-   * @returns Object {name, blob}
+   * @returns Object {name, src}
   */
   stopRecord() {
     this.timer && clearInterval(this.timer)
     this.mediaRecord && this.mediaRecord.stop()
+    // console.log('stopRecord this.chunks', this.chunks)
     // 生成视频blob
     const type = `${this.option.fileDownload.fileType || 'mp4'}`
     const name = `${this.option.fileDownload.fileName || 'video'}.${type}`
     const blob = new Blob(this.chunks, {
       type: `video/${type}`
     })
-    return { name, blob }
+    const src = URL.createObjectURL(blob)
+    return { name, blob, src }
   }
 }
 
 const imagesTovideo = {
-  init,
+  startRecord,
   downloadVideo
 }
 

@@ -2,11 +2,12 @@
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: 'videoToAudio', component: () => import('pages/video/VideoToAudio.vue') },
-      { path: 'imagesToVideo', component: () => import('pages/video/ImagesToVideo.vue') }
+      { path: '', name: 'index', component: () => import('pages/Index.vue') },
+      { path: 'videoToAudio', name: 'videoToAudio', component: () => import('pages/video/VideoToAudio.vue') },
+      { path: 'imagesToVideo', name: 'imagesToVideo', component: () => import('pages/video/ImagesToVideo.vue') }
     ]
   },
 

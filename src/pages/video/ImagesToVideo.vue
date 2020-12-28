@@ -2,12 +2,11 @@
   <q-page :class="$q.dark.isActive ? '' : 'bg-grey-2'">
     <div class="row flex flex-center q-pa-md">
       <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-        <imagesCard :files="files" :show-sticky.sync="showSticky" />
+        <imagesCard :files="files" :show-sticky.sync="showSticky" :show-choose.sync="showChoose" />
         <q-btn
-          v-if="!showSticky"
+          v-if="showChoose && !showSticky"
           :label="$t('actionImages.chooseFile')"
           rounded
-          push
           ripple
           color="primary"
           class="full-width q-mt-md"
@@ -18,10 +17,10 @@
     </div>
 
     <q-page-scroller position="bottom-right" :scroll-offset="scrollOffset" :offset="offset">
-      <q-btn push round ripple icon="keyboard_arrow_up" color="orange" />
+      <q-btn round ripple icon="keyboard_arrow_up" color="primary" />
     </q-page-scroller>
-    <q-page-sticky v-if="showSticky" position="bottom" :offset="fileOffset">
-      <q-btn push round ripple size="lg" icon="add" color="primary">
+    <q-page-sticky v-if="showChoose && showSticky" position="bottom" :offset="fileOffset">
+      <q-btn round ripple size="lg" icon="add" color="primary">
         <fileInput v-model="files" :accept="accept" />
       </q-btn>
     </q-page-sticky>
@@ -41,6 +40,7 @@ export default {
     return {
       offset: [18, 18],
       scrollOffset: 150,
+      showChoose: true,
       showSticky: false,
       fileOffset: [0, 18],
       accept: 'image/*',
@@ -49,10 +49,10 @@ export default {
   },
   watch: {
     files(val, old) {
-      console.log('PageIndex watch files', val)
+      console.log('ImagesToVideo watch files', val)
     },
     showSticky(val, old) {
-      console.log('PageIndex watch showSticky', val)
+      console.log('ImagesToVideo watch showSticky', val)
     }
   },
   created() {

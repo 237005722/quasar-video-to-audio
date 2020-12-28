@@ -7,7 +7,6 @@
           v-if="!showSticky"
           :label="$t('actionVideo.chooseFile')"
           rounded
-          push
           ripple
           color="primary"
           class="full-width q-mt-md"
@@ -18,10 +17,10 @@
     </div>
 
     <q-page-scroller position="bottom-right" :scroll-offset="scrollOffset" :offset="offset">
-      <q-btn push round ripple icon="keyboard_arrow_up" color="orange" />
+      <q-btn round ripple icon="keyboard_arrow_up" color="primary" />
     </q-page-scroller>
     <q-page-sticky v-if="showSticky" position="bottom" :offset="fileOffset">
-      <q-btn push round ripple size="lg" icon="add" color="primary">
+      <q-btn round ripple size="lg" icon="add" color="primary">
         <fileInput v-model="files" />
       </q-btn>
     </q-page-sticky>
@@ -48,10 +47,10 @@ export default {
   },
   watch: {
     files(val, old) {
-      console.log('PageIndex watch files', val)
+      console.log('VideoToAudio watch files', val)
     },
     showSticky(val, old) {
-      console.log('PageIndex watch showSticky', val)
+      console.log('VideoToAudio watch showSticky', val)
     }
   },
   created() {

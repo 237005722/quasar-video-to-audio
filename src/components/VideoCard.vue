@@ -19,7 +19,6 @@
         <q-btn
           :disable="loading"
           :loading="loading"
-          push
           round
           ripple
           color="negative"
@@ -38,7 +37,6 @@
         <q-btn
           :disable="loading"
           :loading="loading"
-          push
           round
           ripple
           color="primary"
@@ -69,7 +67,6 @@
           <q-btn
             :disable="loading"
             :loading="loading"
-            push
             round
             ripple
             color="secondary"
@@ -134,8 +131,8 @@ export default {
       }
     }
   },
-  created() {
-    console.log('created')
+  mounted() {
+    console.log('mounted')
     this.$indexDB.initDB(this.$myDB, () => {
       this.$indexDB.getDataByKey('fileList', (store, res) => {
         if (res && res.data) {
@@ -153,15 +150,20 @@ export default {
   },
   methods: {
     async initFileList(files = this.files) {
-      this.loading = true
-      await Object.keys(files).map(key => {
-        const file = files[key]
-        this.initFileItem(file)
-      })
-      this.initFileData()
-      console.log('initFileList cacheFileList')
-      this.cacheFileList()
-      this.loading = false
+      try {
+        this.loading = true
+        await Object.keys(files).map(key => {
+          const file = files[key]
+          this.initFileItem(file)
+        })
+        this.initFileData()
+        console.log('initFileList cacheFileList')
+        this.cacheFileList()
+      } catch (error) {
+        console.log('initFileList error', error)
+      } finally {
+        this.loading = false
+      }
     },
     initFileItem(file) {
       this.fileList.push({
@@ -230,7 +232,7 @@ export default {
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
-          icon: 'cloud_done',
+          icon: 'done',
           message: `${this.$t('actionVideo.success')}`
         })
       } else {

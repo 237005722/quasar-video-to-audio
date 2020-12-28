@@ -2,15 +2,12 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated reveal :reveal-offset="300" class="bg-transparent text-primary">
       <q-toolbar>
-        <router-link
-          exact
-          to="/"
-          active-class="text-primary"
-        >
-          <q-toolbar-title>{{ $t('title') }}</q-toolbar-title>
-        </router-link>
+        <q-btn v-if="this.$route.path !== '/'" flat round dense icon="arrow_back" @click="$router.back(-1)" />
+        <q-toolbar-title>
+          {{ $t('title') }}
+        </q-toolbar-title>
         <q-space />
-        <q-btn push color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right">
+        <q-btn color="white" text-color="primary" round ripple icon="settings" class="q-ml-md" @click="right = !right">
           <q-tooltip content-class="bg-primary">
             {{ $t('setting.settingsDesc') }}
           </q-tooltip>
@@ -151,6 +148,7 @@ export default {
     console.log('mainlayout query', this.query)
   },
   mounted() {
+    console.log('this.$route', this.$route)
   },
   methods: {
     toggleDarkMode() {

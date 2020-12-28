@@ -10,7 +10,7 @@
       </div>
     </div>
     <q-page-scroller position="bottom-right" :scroll-offset="scrollOffset" :offset="offset">
-      <q-btn push round ripple icon="keyboard_arrow_up" color="orange" />
+      <q-btn round ripple icon="keyboard_arrow_up" color="primary" />
     </q-page-scroller>
   </q-page>
 </template>

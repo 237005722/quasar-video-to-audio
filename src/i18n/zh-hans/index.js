@@ -9,6 +9,7 @@ const index = {
   confirmTitle: '请确认',
   confirmOk: '确认',
   confirmCancel: '取消',
+  back: '返回',
 
   setting: {
     settings: '设置',
@@ -35,6 +36,7 @@ const index = {
 
   actionImages: {
     chooseFile: '选择图片文件',
+    fileTotal: '图片总计：',
     noFileError: '请先选择图片文件',
     delImages: '删除图片',
     delImagesConfirm: '您确认要删除图片吗？',
